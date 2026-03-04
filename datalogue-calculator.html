@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datalogue — Calculadora Interna</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #F7F6F3;
+    --bg2:       #FFFFFF;
+    --bg3:       #F0EEE9;
+    --border:    #E2DDD6;
+    --border2:   #C8C2B8;
+    --text:      #1A1714;
+    --text2:     #3D3830;
+    --muted:     #8C8077;
+    --accent:    #1A4FD4;
+    --accent-lt: #EBF0FC;
+    --green:     #1A7A4A;
+    --green-lt:  #E8F5EE;
+    --orange:    #C4610A;
+    --orange-lt: #FEF3E6;
+    --red:       #C0392B;
+    --red-lt:    #FDECEB;
+    --purple:    #6B3FA0;
+    --purple-lt: #F2ECF9;
+    --julius:    #B5770A;
+    --julius-lt: #FBF5E6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Geist Mono',monospace; font-size:13px; line-height:1.6; min-height:100vh; }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.018'%3E%3Cpath d='M0 0h1v40H0V0zm39 0h1v40h-1V0zM0 0v1h40V0H0zm0 39v1h40v-1H0z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .wrap { position:relative; z-index:1; max-width:1300px; margin:0 auto; padding:0 28px 100px; }
+
+  /* HEADER */
+  header { padding:36px 0 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
+  .header-left { display:flex; align-items:baseline; gap:16px; }
+  .logo { font-family:'Instrument Serif',serif; font-size:28px; letter-spacing:-0.5px; color:var(--text); }
+  .logo-sub { font-size:11px; color:var(--muted); letter-spacing:0.5px; }
+  .header-right { display:flex; align-items:center; gap:10px; }
+  .badge { background:var(--bg3); border:1px solid var(--border2); color:var(--muted); font-size:10px; padding:4px 12px; border-radius:4px; letter-spacing:1.5px; text-transform:uppercase; font-weight:500; }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* TABS */
+  .tabs { display:flex; gap:0; margin-bottom:28px; border-bottom:2px solid var(--border); }
+  .tab { padding:10px 22px; cursor:pointer; font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; color:var(--muted); transition:all .15s; border:none; background:transparent; border-bottom:2px solid transparent; margin-bottom:-2px; white-space:nowrap; }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+
+  /* PANELS */
+  .panel { display:none; }
+  .panel.active { display:block; animation:slideUp .25s ease; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* CARD */
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+  .card-title { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+  .card-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* GRIDS */
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .grid-auto { display:grid; grid-template-columns:260px 1fr; gap:20px; }
+  @media(max-width:900px){ .grid-3,.grid-2,.grid-auto { grid-template-columns:1fr; } }
+
+  /* INPUTS */
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-size:10px; font-weight:600; letter-spacing:.8px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+  .field input[type="number"] { width:100%; background:var(--bg); border:1px solid var(--border2); color:var(--text); padding:9px 12px; border-radius:6px; font-family:'Geist Mono',monospace; font-size:14px; font-weight:500; transition:all .15s; outline:none; -moz-appearance:textfield; }
+  .field input[type="number"]::-webkit-outer-spin-button,.field input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
+  .field input[type="number"]:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(26,79,212,.08); }
+
+  /* METRICS */
+  .metric { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:10px; }
+  .metric-label { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+  .metric-value { font-family:'Instrument Serif',serif; font-size:28px; letter-spacing:-.5px; color:var(--text); }
+  .metric-value.green  { color:var(--green); }
+  .metric-value.accent { color:var(--accent); }
+  .metric-value.gold   { color:var(--julius); }
+  .metric-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+  /* PLAN CARDS */
+  .plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+  @media(max-width:900px){ .plan-grid { grid-template-columns:1fr; } }
+  .plan-card { border-radius:12px; padding:22px; border:1px solid var(--border); background:var(--bg2); box-shadow:0 1px 3px rgba(0,0,0,.06); transition:box-shadow .2s,transform .2s; position:relative; overflow:hidden; }
+  .plan-card:hover { box-shadow:0 4px 16px rgba(0,0,0,.08); transform:translateY(-1px); }
+  .plan-accent-bar { position:absolute; top:0; left:0; right:0; height:3px; border-radius:12px 12px 0 0; }
+  .plan-card.starter .plan-accent-bar { background:var(--green); }
+  .plan-card.pro .plan-accent-bar     { background:var(--accent); }
+  .plan-card.ent .plan-accent-bar     { background:var(--purple); }
+  .plan-eyebrow { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; margin-top:8px; }
+  .plan-card.starter .plan-eyebrow { color:var(--green); }
+  .plan-card.pro .plan-eyebrow     { color:var(--accent); }
+  .plan-card.ent .plan-eyebrow     { color:var(--purple); }
+  .plan-price { font-family:'Instrument Serif',serif; font-size:32px; letter-spacing:-1px; color:var(--text); margin:8px 0 2px; }
+  .plan-price span { font-size:13px; color:var(--muted); font-family:'Geist Mono',monospace; letter-spacing:0; }
+  .plan-target { font-size:11px; color:var(--muted); margin-bottom:18px; }
+  .plan-divider { height:1px; background:var(--border); margin:14px 0; }
+  .plan-stat { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:11px; }
+  .plan-stat-label { color:var(--muted); }
+  .plan-stat-value { font-weight:600; color:var(--text2); }
+  .plan-stat-value.positive { color:var(--green); }
+  .plan-stat-value.negative { color:var(--red); }
+  .plan-stat-value.warn     { color:var(--orange); }
+  .plan-stat-value.blue     { color:var(--accent); }
+
+  /* FEATURES TABLE */
+  .table-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--border); }
+  .feat-table { width:100%; border-collapse:collapse; background:var(--bg2); }
+  .feat-table th { text-align:center; padding:14px 16px; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; background:var(--bg3); border-bottom:2px solid var(--border2); white-space:nowrap; }
+  .feat-table th:first-child { text-align:left; width:36%; }
+  .col-starter { color:var(--green) !important; }
+  .col-pro     { color:var(--accent) !important; }
+  .col-ent     { color:var(--purple) !important; }
+  .col-julius  { color:var(--julius) !important; }
+  .feat-table td { padding:10px 16px; text-align:center; border-bottom:1px solid var(--border); font-size:12px; color:var(--muted); background:var(--bg2); }
+  .feat-table td:first-child { text-align:left; color:var(--text2); }
+  .feat-table tr:hover td { background:var(--bg3); }
+  .feat-section td { background:var(--bg3) !important; color:var(--accent) !important; font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:8px 16px; border-bottom:1px solid var(--border2) !important; }
+  .yes  { color:var(--green)   !important; font-weight:600; }
+  .no   { color:var(--red)     !important; }
+  .part { color:var(--orange)  !important; }
+  .na   { color:var(--border2) !important; font-size:11px; }
+
+  /* COMP BARS */
+  .comp-grid { display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start; }
+  @media(max-width:700px){ .comp-grid { grid-template-columns:1fr; } }
+  .comp-bar-row { display:grid; grid-template-columns:150px 1fr 90px; gap:10px; align-items:center; margin-bottom:8px; }
+  .comp-bar-label { font-size:11px; color:var(--muted); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .comp-bar-track { height:28px; background:var(--bg3); border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+  .comp-bar-fill { height:100%; border-radius:6px; transition:width .5s cubic-bezier(.25,.46,.45,.94); display:flex; align-items:center; padding-left:10px; font-size:11px; font-weight:600; color:#fff; white-space:nowrap; }
+  .comp-bar-amt { font-size:12px; font-weight:600; color:var(--text2); text-align:right; }
+
+  /* GAPS */
+  .gap-item { display:flex; gap:14px; align-items:flex-start; padding:14px 16px; border-radius:8px; margin-bottom:8px; border-left:3px solid transparent; }
+  .gap-item.critical  { background:var(--red-lt);    border-left-color:var(--red); }
+  .gap-item.medium    { background:var(--orange-lt); border-left-color:var(--orange); }
+  .gap-item.advantage { background:var(--green-lt);  border-left-color:var(--green); }
+  .gap-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .gap-item.critical  .gap-dot { background:var(--red); }
+  .gap-item.medium    .gap-dot { background:var(--orange); }
+  .gap-item.advantage .gap-dot { background:var(--green); }
+  .gap-title { font-weight:600; font-size:12px; color:var(--text); margin-bottom:2px; }
+  .gap-desc  { font-size:11px; color:var(--muted); line-height:1.5; }
+
+  /* UNIT ECONOMICS */
+  .ue-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media(max-width:900px){ .ue-grid { grid-template-columns:1fr; } }
+  .ue-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+  .ue-plan { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+  .ue-row { display:flex; justify-content:space-between; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--bg3); }
+  .ue-row:last-child { border-bottom:none; }
+  .ue-key { font-size:11px; color:var(--muted); }
+  .ue-val { font-family:'Instrument Serif',serif; font-size:17px; letter-spacing:-.3px; color:var(--text); }
+  .ue-val.yes  { color:var(--green); }
+  .ue-val.part { color:var(--orange); }
+  .ue-val.no   { color:var(--red); }
+
+  /* SECTION */
+  .section-heading { margin-bottom:24px; }
+  .section-title { font-family:'Instrument Serif',serif; font-size:22px; letter-spacing:-.3px; color:var(--text); margin-bottom:4px; }
+  .section-sub { font-size:12px; color:var(--muted); }
+
+  /* INFO NOTE */
+  .info-note { background:var(--accent-lt); border:1px solid rgba(26,79,212,.15); border-radius:8px; padding:12px 16px; font-size:11px; color:var(--muted); margin-top:16px; line-height:1.7; }
+  .info-note strong { color:var(--accent); }
+
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg3); }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="header-left">
+      <div class="logo">Datalogue</div>
+      <div class="logo-sub">calculadora interna</div>
+    </div>
+    <div class="header-right">
+      <div class="live-dot"></div>
+      <span class="badge">v4 · uso interno</span>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('custos',this)">Custos & Margens</button>
+    <button class="tab" onclick="showPanel('planos',this)">Planos & Features</button>
+    <button class="tab" onclick="showPanel('versus',this)">vs Julius AI</button>
+    <button class="tab" onclick="showPanel('unitec',this)">Unit Economics</button>
+  </div>
+
+  <!-- CUSTOS -->
+  <div id="panel-custos" class="panel active">
+    <div class="section-heading">
+      <div class="section-title">Simulador de Custos & Margens</div>
+      <div class="section-sub">Ajuste os parâmetros para simular o modelo financeiro dos 3 planos em tempo real.</div>
+    </div>
+    <div class="grid-auto">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-title">Parâmetros Gerais</div>
+          <div class="field"><label>PTAX (USD→BRL)</label><input type="number" id="ptax" value="5.80" step="0.05" oninput="calc()"></div>
+          <div class="field"><label>Tokens input / conversa</label><input type="number" id="tok_in" value="20000" step="1000" oninput="calc()"></div>
+          <div class="field"><label>Tokens output / conversa</label><input type="number" id="tok_out" value="2000" step="500" oninput="calc()"></div>
+          <div class="field"><label>Sonnet input ($/1M tok)</label><input type="number" id="llm_in" value="3.00" step="0.5" oninput="calc()"></div>
+          <div class="field"><label>Sonnet output ($/1M tok)</label><input type="number" id="llm_out" value="15.00" step="0.5" oninput="calc()"></div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-title">Infraestrutura (USD/mês)</div>
+          <div class="field"><label>Supabase Pro</label><input type="number" id="supabase" value="25" oninput="calc()"></div>
+          <div class="field"><label>Monitoramento</label><input type="number" id="monitor" value="20" oninput="calc()"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Sócios (BRL/mês)</div>
+          <div class="field"><label>Custo oportunidade total</label><input type="number" id="socios" value="9000" step="500" oninput="calc()"></div>
+        </div>
+      </div>
+      <div>
+        <div class="plan-grid">
+          <div class="plan-card starter">
+            <div class="plan-accent-bar"></div>
+            <div class="plan-eyebrow">Starter</div>
+            <div class="plan-price">R$ 790 <span>/mês</span></div>
+            <div class="plan-target">Pequenas empresas</div>
+            <div class="field"><label>Preço (R$)</label><input type="number" id="price_s" value="790" oninput="calc()"></div>
+            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_s" value="10" oninput="calc()"></div>
+            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_s" value="100" oninput="calc()"></div>
+            <div class="plan-divider"></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo LLM</span><span class="plan-stat-value" id="s_llm">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="s_cost">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo/cliente</span><span class="plan-stat-value" id="s_cpc">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Receita</span><span class="plan-stat-value blue" id="s_rev">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Lucro bruto</span><span class="plan-stat-value" id="s_profit">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Margem</span><span class="plan-stat-value" id="s_margin">—</span></div>
+          </div>
+          <div class="plan-card pro">
+            <div class="plan-accent-bar"></div>
+            <div class="plan-eyebrow">Pro</div>
+            <div class="plan-price">R$ 1.990 <span>/mês</span></div>
+            <div class="plan-target">Médias empresas</div>
+            <div class="field"><label>Preço (R$)</label><input type="number" id="price_p" value="1990" oninput="calc()"></div>
+            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_p" value="50" oninput="calc()"></div>
+            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_p" value="1000" oninput="calc()"></div>
+            <div class="plan-divider"></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo LLM</span><span class="plan-stat-value" id="p_llm">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="p_cost">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo/cliente</span><span class="plan-stat-value" id="p_cpc">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Receita</span><span class="plan-stat-value blue" id="p_rev">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Lucro bruto</span><span class="plan-stat-value" id="p_profit">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Margem</span><span class="plan-stat-value" id="p_margin">—</span></div>
+          </div>
+          <div class="plan-card ent">
+            <div class="plan-accent-bar"></div>
+            <div class="plan-eyebrow">Enterprise</div>
+            <div class="plan-price">R$ 4.990 <span>/mês</span></div>
+            <div class="plan-target">Grandes empresas</div>
+            <div class="field"><label>Preço (R$)</label><input type="number" id="price_e" value="4990" oninput="calc()"></div>
+            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_e" value="5" oninput="calc()"></div>
+            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_e" value="2000" oninput="calc()"></div>
+            <div class="plan-divider"></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo LLM</span><span class="plan-stat-value" id="e_llm">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="e_cost">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Custo/cliente</span><span class="plan-stat-value" id="e_cpc">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Receita</span><span class="plan-stat-value blue" id="e_rev">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Lucro bruto</span><span class="plan-stat-value" id="e_profit">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">Margem</span><span class="plan-stat-value" id="e_margin">—</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Consolidado</div>
+          <div class="grid-3">
+            <div class="metric"><div class="metric-label">MRR Total</div><div class="metric-value accent" id="tot_mrr">—</div><div class="metric-sub">mensal recorrente</div></div>
+            <div class="metric"><div class="metric-label">ARR</div><div class="metric-value" id="tot_arr">—</div><div class="metric-sub">MRR × 12</div></div>
+            <div class="metric"><div class="metric-label">Lucro Bruto</div><div class="metric-value green" id="tot_profit">—</div><div class="metric-sub">receita − custos</div></div>
+            <div class="metric"><div class="metric-label">Margem Consolidada</div><div class="metric-value gold" id="tot_margin">—</div><div class="metric-sub">bruta média</div></div>
+            <div class="metric"><div class="metric-label">Custo LLM</div><div class="metric-value" id="tot_llm">—</div><div class="metric-sub">Claude/mês</div></div>
+            <div class="metric"><div class="metric-label">Total Clientes</div><div class="metric-value" id="tot_clients">—</div><div class="metric-sub">base ativa</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div id="panel-planos" class="panel">
+    <div class="section-heading">
+      <div class="section-title">Planos & Features</div>
+      <div class="section-sub">Comparativo completo das funcionalidades de cada plano Datalogue.</div>
+    </div>
+
+    <!-- Plan header cards -->
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:4px;padding:0 0 0 0">
+      <div></div>
+      <div style="background:var(--green-lt);border:1.5px solid var(--green);border-radius:10px;padding:14px 16px;text-align:center">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">Starter</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);letter-spacing:-0.5px">R$ 790</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">por empresa / mês</div>
+        <div style="font-size:10px;color:var(--green);margin-top:6px;font-weight:600">+ Setup R$ 2.000</div>
+      </div>
+      <div style="background:var(--accent-lt);border:1.5px solid var(--accent);border-radius:10px;padding:14px 16px;text-align:center">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px">Pro</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);letter-spacing:-0.5px">R$ 1.990</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">por empresa / mês</div>
+        <div style="font-size:10px;color:var(--accent);margin-top:6px;font-weight:600">+ Setup R$ 4.000</div>
+      </div>
+      <div style="background:var(--purple-lt);border:1.5px solid var(--purple);border-radius:10px;padding:14px 16px;text-align:center">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:4px">Enterprise</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);letter-spacing:-0.5px">R$ 4.990</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">por empresa / mês</div>
+        <div style="font-size:10px;color:var(--purple);margin-top:6px;font-weight:600">+ Setup sob consulta</div>
+      </div>
+    </div>
+
+    <!-- Features table -->
+    <div class="table-wrap">
+      <table class="feat-table" style="table-layout:fixed;width:100%">
+        <colgroup>
+          <col style="width:40%">
+          <col style="width:20%">
+          <col style="width:20%">
+          <col style="width:20%">
+        </colgroup>
+        <thead><tr>
+          <th style="text-align:left">Feature</th>
+          <th class="col-starter">Starter</th>
+          <th class="col-pro">Pro</th>
+          <th class="col-ent">Enterprise</th>
+        </tr></thead>
+        <tbody id="feat-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VS JULIUS -->
+  <div id="panel-versus" class="panel">
+    <div class="section-heading">
+      <div class="section-title">Datalogue vs Julius AI</div>
+      <div class="section-sub">Comparativo de features, preços e posicionamento estratégico.</div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Simulador — Custo Real por Empresa</div>
+      <div class="comp-grid">
+        <div>
+          <div class="field"><label>Nº de usuários da empresa</label><input type="number" id="sim_users" value="5" min="1" max="200" oninput="calcComp()"></div>
+          <div class="info-note">Julius cobra <strong>por usuário/mês</strong>.<br>Datalogue cobra <strong>por empresa</strong>.<br>Quanto mais usuários, mais o Datalogue vence.</div>
+        </div>
+        <div id="comp-bars"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Features — Datalogue Pro vs Julius Pro</div>
+      <div class="table-wrap">
+        <table class="feat-table">
+          <thead><tr>
+            <th>Feature</th>
+            <th class="col-pro">Datalogue Pro</th>
+            <th class="col-julius">Julius Pro</th>
+            <th>Vantagem</th>
+          </tr></thead>
+          <tbody id="vs-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Gaps — o que o Julius tem e nós não</div><div id="gaps-list"></div></div>
+      <div class="card"><div class="card-title">Nossas vantagens sobre o Julius</div><div id="adv-list"></div></div>
+    </div>
+  </div>
+
+  <!-- UNIT ECONOMICS -->
+  <div id="panel-unitec" class="panel">
+    <div class="section-heading">
+      <div class="section-title">Unit Economics por Cliente</div>
+      <div class="section-sub">LTV, CAC, Payback e contribuição marginal. Ajuste os inputs abaixo.</div>
+    </div>
+    <div class="ue-grid" style="margin-bottom:20px" id="ue-cards"></div>
+    <div class="card">
+      <div class="card-title">Inputs</div>
+      <div class="grid-3">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px">Starter</div>
+          <div class="field"><label>CAC (R$)</label><input type="number" id="ue_cac_s" value="800" oninput="calcUE()"></div>
+          <div class="field"><label>Churn mensal (%)</label><input type="number" id="ue_churn_s" value="2" step="0.5" oninput="calcUE()"></div>
+          <div class="field"><label>Custo suporte/cliente</label><input type="number" id="ue_sup_s" value="80" oninput="calcUE()"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px">Pro</div>
+          <div class="field"><label>CAC (R$)</label><input type="number" id="ue_cac_p" value="2500" oninput="calcUE()"></div>
+          <div class="field"><label>Churn mensal (%)</label><input type="number" id="ue_churn_p" value="1.5" step="0.5" oninput="calcUE()"></div>
+          <div class="field"><label>Custo suporte/cliente</label><input type="number" id="ue_sup_p" value="150" oninput="calcUE()"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:14px">Enterprise</div>
+          <div class="field"><label>CAC (R$)</label><input type="number" id="ue_cac_e" value="8000" oninput="calcUE()"></div>
+          <div class="field"><label>Churn mensal (%)</label><input type="number" id="ue_churn_e" value="1" step="0.5" oninput="calcUE()"></div>
+          <div class="field"><label>Custo suporte/cliente</label><input type="number" id="ue_sup_e" value="400" oninput="calcUE()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+const R  = v => 'R$\u00a0' + Math.round(v).toLocaleString('pt-BR');
+const Pc = v => (v*100).toFixed(1) + '%';
+const N  = v => Math.round(v).toLocaleString('pt-BR');
+const X  = v => v.toFixed(1) + 'x';
+const $  = id => document.getElementById(id);
+
+function showPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  $('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='versus') calcComp();
+  if(name==='unitec') calcUE();
+}
+
+function calc() {
+  const ptax    = +$('ptax').value    || 5.8;
+  const tok_in  = +$('tok_in').value  || 20000;
+  const tok_out = +$('tok_out').value || 2000;
+  const li      = +$('llm_in').value  || 3;
+  const lo      = +$('llm_out').value || 15;
+  const inf_brl = (+$('supabase').value+$('monitor').value)*ptax;
+  const socios  = +$('socios').value  || 9000;
+  const cpc_tok = ((tok_in/1e6)*li + (tok_out/1e6)*lo)*ptax;
+
+  const plans = [
+    {px:'s', price:+$('price_s').value, cl:+$('clients_s').value, cv:+$('convs_s').value},
+    {px:'p', price:+$('price_p').value, cl:+$('clients_p').value, cv:+$('convs_p').value},
+    {px:'e', price:+$('price_e').value, cl:+$('clients_e').value, cv:+$('convs_e').value},
+  ];
+  const tot_cl = plans.reduce((a,p)=>a+p.cl,0)||1;
+  let tv=0,tp=0,tl=0;
+
+  plans.forEach(pl=>{
+    const llm  = pl.cl*pl.cv*cpc_tok;
+    const inf  = inf_brl*(pl.cl/tot_cl);
+    const soc  = socios*(pl.cl/tot_cl);
+    const cost = llm+inf+soc;
+    const rev  = pl.price*pl.cl;
+    const pft  = rev-cost;
+    const mgn  = rev?pft/rev:0;
+    tv+=rev; tp+=pft; tl+=llm;
+
+    const g=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
+    g(pl.px+'_llm',    R(llm));
+    g(pl.px+'_cost',   R(cost));
+    g(pl.px+'_cpc',    R(cost/(pl.cl||1)));
+    g(pl.px+'_rev',    R(rev));
+    g(pl.px+'_profit', R(pft));
+    const pe=$(pl.px+'_profit'); if(pe) pe.className='plan-stat-value '+(pft>=0?'positive':'negative');
+    g(pl.px+'_margin', Pc(mgn));
+    const me=$(pl.px+'_margin'); if(me) me.className='plan-stat-value '+(mgn>=.45?'positive':mgn>=.2?'warn':'negative');
+  });
+
+  const tm=tv?tp/tv:0;
+  const sg=(id,v,cl)=>{const e=$(id);if(e){e.textContent=v;if(cl)e.className='metric-value '+cl;}};
+  sg('tot_mrr',    R(tv),   'accent');
+  sg('tot_arr',    R(tv*12),'');
+  sg('tot_profit', R(tp),   'green');
+  sg('tot_margin', Pc(tm),  'gold');
+  sg('tot_llm',    R(tl),   '');
+  sg('tot_clients',N(tot_cl),'');
+}
+
+const featData = [
+  {sec:'DADOS'},
+  {f:'Upload CSV / XLSX',             st:'✅',        p:'✅',              e:'✅'},
+  {f:'Upload JSON / semi-estruturado',st:'❌',        p:'✅',              e:'✅'},
+  {f:'Integração via API (push)',      st:'❌',        p:'❌',              e:'✅'},
+  {f:'Conectores SQL nativos',         st:'Via n8n',   p:'Via n8n + SQL',  e:'✅ Nativo'},
+  {f:'Atualização de dados',           st:'Manual',    p:'Agendada',       e:'Tempo real'},
+  {f:'Volume de dados',                st:'5 GB',      p:'50 GB',          e:'Ilimitado'},
+  {f:'Retenção histórica',             st:'3 meses',   p:'12 meses',       e:'Ilimitado'},
+  {sec:'ANALYTICS & CHAT'},
+  {f:'Chat em linguagem natural',      st:'✅',        p:'✅',              e:'✅'},
+  {f:'Conversas incluídas / mês',      st:'100',       p:'1.000',          e:'Personalizado'},
+  {f:'Pacote conversas extras',        st:'R$ 99/100', p:'R$ 79/300',      e:'Negociado'},
+  {f:'Geração de gráficos',            st:'Básico (3 tipos)', p:'Avançado (10 tipos)', e:'Full BI custom'},
+  {f:'Exportação PDF/CSV',             st:'❌',        p:'✅',              e:'✅'},
+  {f:'Histórico de conversas',         st:'7 dias',    p:'90 dias',        e:'Ilimitado'},
+  {f:'Multi-tabela / join automático', st:'❌',        p:'✅',              e:'✅'},
+  {sec:'DASHBOARD'},
+  {f:'Dashboard padrão incluso',       st:'✅ Fixo',   p:'✅ Fixo',        e:'✅ Customizado'},
+  {f:'Widgets customizáveis',          st:'Não',       p:'Até 5',          e:'Ilimitado'},
+  {f:'Relatórios agendados (email)',   st:'❌',        p:'✅',              e:'✅'},
+  {f:'White-label',                    st:'❌',        p:'❌',              e:'✅'},
+  {sec:'USUÁRIOS & SEGURANÇA'},
+  {f:'Usuários incluídos',             st:'1',         p:'3',              e:'Personalizado'},
+  {f:'Usuários adicionais',            st:'R$ 79/user',p:'R$ 59/user',     e:'Incluso'},
+  {f:'SSO / Active Directory',         st:'❌',        p:'❌',              e:'✅'},
+  {f:'RBAC (permissões por função)',   st:'❌',        p:'✅',              e:'✅'},
+  {f:'Auditoria de acessos',           st:'❌',        p:'✅',              e:'✅'},
+  {f:'Criptografia (repouso+trânsito)',st:'✅',        p:'✅',              e:'✅'},
+  {f:'LGPD / Contrato de dados',       st:'Padrão',    p:'Padrão',         e:'Customizado'},
+  {sec:'SUPORTE & SETUP'},
+  {f:'Suporte',                        st:'Email (48h)',p:'Chat (8h)',      e:'CSM dedicado'},
+  {f:'SLA uptime',                     st:'99%',       p:'99,5%',          e:'99,9%'},
+  {f:'Taxa de setup (one-time)',        st:'R$ 2.000',  p:'R$ 4.000',      e:'Sob consulta'},
+  {f:'Engenharia de dados inclusa',    st:'1 tabela',  p:'Até 3 tabelas',  e:'Ilimitado'},
+  {f:'Idioma',                         st:'🇧🇷 PT-BR', p:'🇧🇷 PT-BR',      e:'🇧🇷 PT-BR'},
+];
+
+function renderFeatures(){
+  const cls = v => {
+    if (!v) return '';
+    if (v === '✅' || v.startsWith('✅')) return 'yes';
+    if (v === '❌' || v.startsWith('❌')) return 'no';
+    return '';
+  };
+  $('feat-body').innerHTML = featData.map(r => {
+    if (r.sec) {
+      return `<tr class="feat-section"><td colspan="4">${r.sec}</td></tr>`;
+    }
+    return `<tr>
+      <td>${r.f}</td>
+      <td class="${cls(r.st)}">${r.st}</td>
+      <td class="${cls(r.p)}">${r.p}</td>
+      <td class="${cls(r.e)}">${r.e}</td>
+    </tr>`;
+  }).join('');
+}
+
+const vsData=[
+  {f:'Chat em linguagem natural',dat:'✅',jul:'✅',win:'Empate'},
+  {f:'Modelo de IA',dat:'Claude Sonnet',jul:'GPT-4o',win:'Datalogue',why:'Contexto 200k tokens'},
+  {f:'Geração de gráficos',dat:'✅',jul:'✅',win:'Empate'},
+  {f:'Execução de código Python/SQL',dat:'❌',jul:'✅',win:'Julius',why:'GAP crítico'},
+  {f:'Notebooks reutilizáveis',dat:'❌',jul:'✅',win:'Julius',why:'GAP crítico'},
+  {f:'Conector SQL nativo',dat:'Via n8n',jul:'✅ Nativo',win:'Julius'},
+  {f:'Integração Slack',dat:'❌ (Ent.)',jul:'✅',win:'Julius'},
+  {f:'Dashboard incluso',dat:'✅',jul:'❌',win:'Datalogue'},
+  {f:'White-label',dat:'✅ (Ent.)',jul:'❌',win:'Datalogue'},
+  {f:'Setup + engenharia de dados',dat:'✅ R$2–4k',jul:'❌ Self-serv',win:'Datalogue'},
+  {f:'Idioma nativo',dat:'🇧🇷 PT-BR',jul:'🇺🇸 Inglês',win:'Datalogue'},
+  {f:'LGPD / compliance BR',dat:'✅',jul:'GDPR apenas',win:'Datalogue'},
+  {f:'Modelo de cobrança',dat:'Por empresa',jul:'Por usuário',win:'Datalogue',why:'5 users = muito mais barato'},
+  {f:'SLA / Uptime garantido',dat:'99–99,9%',jul:'Não divulga',win:'Datalogue'},
+  {f:'SOC 2 Type II',dat:'❌ (futuro)',jul:'✅',win:'Julius'},
+];
+
+const gaps=[
+  {type:'critical',title:'Notebooks / análises reutilizáveis',desc:'Julius Pro já tem. Cliente cria workflow uma vez e roda todo mês. Alta demanda.'},
+  {type:'critical',title:'Execução de código Python / SQL',desc:'Julius executa código real com passo a passo. Datalogue só linguagem natural.'},
+  {type:'medium',title:'Integração Slack nativa',desc:'Julius entrega relatórios direto no Slack. Muito valorizado por times modernos.'},
+  {type:'medium',title:'SOC 2 Type II',desc:'Julius já tem. Necessário para clientes de saúde, financeiro e governo.'},
+];
+
+const adv=[
+  {type:'advantage',title:'Preço por empresa, não por usuário',desc:'Com 5+ usuários, Datalogue é muito mais barato. Veja no simulador.'},
+  {type:'advantage',title:'Claude Sonnet — janela de 200k tokens',desc:'Contexto maior que GPT-4o. Melhor para bases grandes.'},
+  {type:'advantage',title:'Setup + engenharia de dados inclusa',desc:'Julius é self-service puro. Datalogue faz a mão na massa.'},
+  {type:'advantage',title:'Produto 100% em PT-BR + LGPD',desc:'Julius é inglês. Mercado BR sub-atendido por ferramentas nativas.'},
+  {type:'advantage',title:'Dashboard padrão incluso',desc:'Julius não tem dashboard. Datalogue entrega visualização desde o dia 1.'},
+  {type:'advantage',title:'SLA e suporte com CSM dedicado',desc:'Julius só tem comunidade/email. Datalogue tem SLA no Enterprise.'},
+];
+
+function renderVS(){
+  const cls=v=>v==='✅'||v.startsWith('✅')?'yes':v==='❌'||v.startsWith('❌')?'no':'';
+  $('vs-body').innerHTML=vsData.map(r=>{
+    const wc=r.win==='Datalogue'?'yes':r.win==='Julius'?'no':'part';
+    const why=r.why?` <span style="font-size:10px;color:var(--muted)">· ${r.why}</span>`:'';
+    return `<tr><td>${r.f}</td><td class="${cls(r.dat)}">${r.dat}</td><td class="${cls(r.jul)}">${r.jul}</td><td class="${wc}">${r.win}${why}</td></tr>`;
+  }).join('');
+  $('gaps-list').innerHTML=gaps.map(g=>`<div class="gap-item ${g.type}"><div class="gap-dot"></div><div><div class="gap-title">${g.title}</div><div class="gap-desc">${g.desc}</div></div></div>`).join('');
+  $('adv-list').innerHTML=adv.map(g=>`<div class="gap-item ${g.type}"><div class="gap-dot"></div><div><div class="gap-title">${g.title}</div><div class="gap-desc">${g.desc}</div></div></div>`).join('');
+}
+
+function calcComp(){
+  const u=+$('sim_users').value||5, P=5.8;
+  const plans=[
+    {l:'Datalogue Starter',c:790+Math.max(0,u-1)*79,    col:'#1A7A4A'},
+    {l:'Datalogue Pro',    c:1990+Math.max(0,u-3)*59,   col:'#1A4FD4'},
+    {l:'Datalogue Ent.',   c:4990,                        col:'#6B3FA0'},
+    {l:'Julius Plus',      c:35*P*u,                      col:'#B5770A'},
+    {l:'Julius Pro',       c:45*P*u,                      col:'#C4610A'},
+    {l:'Julius Max',       c:200*P*u,                     col:'#C0392B'},
+  ];
+  const mx=Math.max(...plans.map(p=>p.c));
+  $('comp-bars').innerHTML=plans.map(p=>{
+    const pct=Math.max(3,(p.c/mx)*100);
+    return `<div class="comp-bar-row">
+      <div class="comp-bar-label">${p.l}</div>
+      <div class="comp-bar-track"><div class="comp-bar-fill" style="width:${pct}%;background:${p.col}">${pct>22?R(p.c):''}</div></div>
+      <div class="comp-bar-amt">${pct<=22?R(p.c):''}</div>
+    </div>`;
+  }).join('');
+}
+
+function calcUE(){
+  const defs=[
+    {px:'s',name:'Starter',   price:790,  color:'var(--green)'},
+    {px:'p',name:'Pro',       price:1990, color:'var(--accent)'},
+    {px:'e',name:'Enterprise',price:4990, color:'var(--purple)'},
+  ];
+  $('ue-cards').innerHTML=defs.map(d=>{
+    const cac  =+$(`ue_cac_${d.px}`).value  ||1;
+    const churn=(+$(`ue_churn_${d.px}`).value||2)/100;
+    const sup  =+$(`ue_sup_${d.px}`).value  ||100;
+    const life =churn>0?1/churn:999;
+    const ltv  =d.price*life;
+    const lc   =ltv/cac;
+    const pay  =cac/d.price;
+    const cont =d.price-sup;
+    const lcC  =lc>=3?'yes':lc>=1?'part':'no';
+    const paC  =pay<=12?'yes':pay<=24?'part':'no';
+    return `<div class="ue-card">
+      <div class="ue-plan" style="color:${d.color}">${d.name}</div>
+      <div class="ue-row"><span class="ue-key">MRR / cliente</span><span class="ue-val">${R(d.price)}</span></div>
+      <div class="ue-row"><span class="ue-key">CAC</span><span class="ue-val">${R(cac)}</span></div>
+      <div class="ue-row"><span class="ue-key">Churn mensal</span><span class="ue-val">${(churn*100).toFixed(1)}%</span></div>
+      <div class="ue-row"><span class="ue-key">Lifetime</span><span class="ue-val">${life.toFixed(0)} meses</span></div>
+      <div class="ue-row"><span class="ue-key">LTV</span><span class="ue-val">${R(ltv)}</span></div>
+      <div class="ue-row"><span class="ue-key">LTV / CAC</span><span class="ue-val ${lcC}">${X(lc)}</span></div>
+      <div class="ue-row"><span class="ue-key">Payback</span><span class="ue-val ${paC}">${pay.toFixed(1)} meses</span></div>
+      <div class="ue-row"><span class="ue-key">Contrib. marginal</span><span class="ue-val">${R(cont)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+calc(); renderFeatures(); renderVS(); calcComp(); calcUE();
+</script>
+</body>
+</html>
