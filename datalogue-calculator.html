@@ -438,7 +438,7 @@
     </div>
 
     <!-- Gaps & Advantages -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
       <div class="card" style="border:2px solid var(--orange)">
         <div class="card-title" style="color:var(--orange)">⚠️ O que Julius tem e nós não</div>
         <div id="gaps-list"></div>
@@ -446,6 +446,89 @@
       <div class="card" style="border:2px solid var(--green)">
         <div class="card-title" style="color:var(--green)">✨ Nossas vantagens competitivas</div>
         <div id="adv-list"></div>
+      </div>
+    </div>
+
+    <!-- SOC 2 Type II Explanation -->
+    <div class="card" style="border:2px solid var(--purple)">
+      <div class="card-title" style="color:var(--purple)">🔒 SOC 2 Type II — O que é e por que importa?</div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+        <div>
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px">📋 O que é SOC 2 Type II?</div>
+          <div style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">
+            É uma auditoria independente que certifica que sua empresa tem controles de segurança, disponibilidade, confidencialidade e privacidade de dados <strong>implementados E funcionando por pelo menos 6 meses</strong>.
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:14px;font-size:13px;color:var(--text2);line-height:1.6">
+            <strong>Type I vs Type II:</strong><br>
+            • <strong>Type I</strong>: Auditoria pontual (controles existem)<br>
+            • <strong>Type II</strong>: Auditoria contínua de 6-12 meses (controles funcionam)
+          </div>
+        </div>
+        
+        <div>
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px">🇧🇷 Por que ter no Brasil?</div>
+          <div style="font-size:14px;color:var(--text2);line-height:1.7">
+            <strong style="color:var(--accent)">1. Clientes enterprise exigem</strong><br>
+            Bancos, fintechs, saúde, seguros e governo não contratam SaaS sem SOC 2 ou ISO 27001.<br><br>
+            
+            <strong style="color:var(--accent)">2. Compliance com LGPD</strong><br>
+            SOC 2 demonstra que você tem processos para proteger dados pessoais (art. 46 LGPD).<br><br>
+            
+            <strong style="color:var(--accent)">3. Diferencial competitivo</strong><br>
+            Pouquíssimas startups BR têm. Julius tem, nós não — isso fecha portas.
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--purple-lt);border:1px solid var(--purple);border-radius:12px;padding:20px;margin-bottom:20px">
+        <div style="font-size:15px;font-weight:600;color:var(--purple);margin-bottom:12px">🛠️ O que precisamos fazer para ter SOC 2 Type II?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">📝 Fase 1: Preparação (3-6 meses)</div>
+            <ul style="font-size:13px;color:var(--text2);line-height:1.8;margin-left:20px">
+              <li>Documentar políticas de segurança</li>
+              <li>Implementar controles de acesso (MFA, RBAC)</li>
+              <li>Configurar logs e monitoramento</li>
+              <li>Criar processo de gestão de incidentes</li>
+              <li>Treinar equipe em segurança</li>
+              <li>Contratar ferramenta de compliance (Vanta, Drata)</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">✅ Fase 2: Auditoria (6-12 meses)</div>
+            <ul style="font-size:13px;color:var(--text2);line-height:1.8;margin-left:20px">
+              <li>Contratar auditor certificado (Big 4 ou boutique)</li>
+              <li>Manter controles funcionando por 6+ meses</li>
+              <li>Coletar evidências contínuas</li>
+              <li>Passar por auditoria final</li>
+              <li>Receber relatório SOC 2 Type II</li>
+              <li>Renovar anualmente</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px">💰 Custo estimado</div>
+          <div style="font-size:24px;font-weight:700;color:var(--text)">$15k - $50k</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">USD/ano (auditoria + ferramentas)</div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px">⏱️ Tempo total</div>
+          <div style="font-size:24px;font-weight:700;color:var(--text)">9-18 meses</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Preparação + auditoria</div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:6px">👥 Esforço interno</div>
+          <div style="font-size:24px;font-weight:700;color:var(--text)">1-2 pessoas</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Dedicação parcial/full-time</div>
+        </div>
+      </div>
+
+      <div style="background:var(--accent-lt);border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:20px;font-size:14px;color:var(--text2);line-height:1.6">
+        <strong style="color:var(--accent)">💡 Alternativa brasileira:</strong> ISO 27001 é mais reconhecida no Brasil e Europa. Custa similar, mas tem mais auditores locais. Muitos clientes aceitam ISO 27001 no lugar de SOC 2.
       </div>
     </div>
   </div>
