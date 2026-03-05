@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Datalogue — Calculadora Interna v2.1</title>
+<title>Datalogue — Calculadora Interna</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -86,7 +86,6 @@
 
   /* PLAN CARDS */
   .plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:24px; }
-  @media(max-width:1200px){ .plan-grid { grid-template-columns:repeat(2,1fr); } }
   @media(max-width:900px){ .plan-grid { grid-template-columns:1fr; } }
   .plan-card { border-radius:16px; padding:28px; border:1px solid var(--border); background:var(--bg2); box-shadow:0 1px 3px rgba(0,0,0,.04); transition:all .3s; position:relative; overflow:hidden; }
   .plan-card:hover { box-shadow:0 8px 24px rgba(0,0,0,.08); transform:translateY(-2px); border-color:var(--border2); }
@@ -98,8 +97,8 @@
   .plan-card.starter .plan-eyebrow { color:var(--green); }
   .plan-card.pro .plan-eyebrow     { color:var(--accent); }
   .plan-card.ent .plan-eyebrow     { color:var(--purple); }
-  .plan-price { font-family:'Inter', sans-serif; font-size:38px; font-weight:700; letter-spacing:-1.5px; color:var(--text); margin:8px 0 4px; line-height:1.1; }
-  .plan-price span { font-size:15px; color:var(--muted); font-family:'Inter', sans-serif; letter-spacing:0; font-weight:400; }
+  .plan-price { font-family:'Inter', sans-serif; font-size:42px; font-weight:700; letter-spacing:-2px; color:var(--text); margin:12px 0 4px; }
+  .plan-price span { font-size:16px; color:var(--muted); font-family:'Inter', sans-serif; letter-spacing:0; font-weight:400; }
   .plan-target { font-size:14px; color:var(--muted); margin-bottom:20px; font-weight:400; }
   .plan-divider { height:1px; background:var(--border); margin:16px 0; }
   .plan-stat { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; }
@@ -226,11 +225,11 @@
         </div>
       </div>
       <div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:24px">
           <div class="plan-card starter">
             <div class="plan-accent-bar"></div>
             <div class="plan-eyebrow">Starter</div>
-            <div class="plan-price">R$ 790 <span>/mês</span></div>
+            <div class="plan-price" style="font-size:38px;letter-spacing:-1.5px">R$ 790 <span>/mês</span></div>
             <div class="plan-target">Pequenas empresas</div>
             <div class="field"><label>Preço (R$)</label><input type="number" id="price_s" value="790" oninput="calc()"></div>
             <div class="field"><label>Clientes ativos</label><input type="number" id="clients_s" value="5" oninput="calc()"></div>
@@ -240,14 +239,14 @@
             <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="s_cost">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo/cliente</span><span class="plan-stat-value" id="s_cpc">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Receita base</span><span class="plan-stat-value blue" id="s_rev">—</span></div>
-            <div class="plan-stat"><span class="plan-stat-label">+ Overage</span><span class="plan-stat-value" style="color:var(--julius)" id="s_overage">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">+ Overage</span><span class="plan-stat-value blue" id="s_ovg">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Lucro bruto</span><span class="plan-stat-value" id="s_profit">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Margem</span><span class="plan-stat-value" id="s_margin">—</span></div>
           </div>
           <div class="plan-card pro">
             <div class="plan-accent-bar"></div>
             <div class="plan-eyebrow">Pro</div>
-            <div class="plan-price">R$ 1.990 <span>/mês</span></div>
+            <div class="plan-price" style="font-size:38px;letter-spacing:-1.5px">R$ 1.990 <span>/mês</span></div>
             <div class="plan-target">Médias empresas</div>
             <div class="field"><label>Preço (R$)</label><input type="number" id="price_p" value="1990" oninput="calc()"></div>
             <div class="field"><label>Clientes ativos</label><input type="number" id="clients_p" value="5" oninput="calc()"></div>
@@ -257,14 +256,14 @@
             <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="p_cost">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo/cliente</span><span class="plan-stat-value" id="p_cpc">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Receita base</span><span class="plan-stat-value blue" id="p_rev">—</span></div>
-            <div class="plan-stat"><span class="plan-stat-label">+ Overage</span><span class="plan-stat-value" style="color:var(--julius)" id="p_overage">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">+ Overage</span><span class="plan-stat-value blue" id="p_ovg">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Lucro bruto</span><span class="plan-stat-value" id="p_profit">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Margem</span><span class="plan-stat-value" id="p_margin">—</span></div>
           </div>
           <div class="plan-card ent">
             <div class="plan-accent-bar"></div>
             <div class="plan-eyebrow">Enterprise</div>
-            <div class="plan-price">R$ 4.990 <span>/mês</span></div>
+            <div class="plan-price" style="font-size:38px;letter-spacing:-1.5px">R$ 4.990 <span>/mês</span></div>
             <div class="plan-target">Grandes empresas</div>
             <div class="field"><label>Preço (R$)</label><input type="number" id="price_e" value="4990" oninput="calc()"></div>
             <div class="field"><label>Clientes ativos</label><input type="number" id="clients_e" value="5" oninput="calc()"></div>
@@ -274,48 +273,45 @@
             <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="e_cost">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo/cliente</span><span class="plan-stat-value" id="e_cpc">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Receita base</span><span class="plan-stat-value blue" id="e_rev">—</span></div>
-            <div class="plan-stat"><span class="plan-stat-label">+ Overage</span><span class="plan-stat-value" style="color:var(--julius)" id="e_overage">—</span></div>
+            <div class="plan-stat"><span class="plan-stat-label">+ Overage</span><span class="plan-stat-value blue" id="e_ovg">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Lucro bruto</span><span class="plan-stat-value" id="e_profit">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Margem</span><span class="plan-stat-value" id="e_margin">—</span></div>
           </div>
-          
-          <!-- Overage Card -->
-          <div class="card" style="padding:22px">
-            <div style="font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--julius);margin-bottom:16px;display:flex;align-items:center;gap:8px">
-              📦 Pacotes Adicionais
+        </div>
+        <div class="card" style="margin-bottom:24px">
+          <div class="card-title">Pacotes Excedentes (Overage)</div>
+          <div class="grid-3">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Starter</div>
+              <div class="field"><label>% clientes que excedem</label><input type="number" id="ovg_pct_s" value="40" min="0" max="100" oninput="calc()"></div>
+              <div class="field"><label>Pacotes extras/cliente</label><input type="number" id="ovg_qty_s" value="1" min="0" oninput="calc()"></div>
+              <div class="field"><label>Preço pacote (R$)</label><input type="number" id="ovg_price_s" value="99" oninput="calc()"></div>
             </div>
-            <div class="field"><label>Preço pacote 100 conversas</label><input type="number" id="overage_price" value="200" step="50" oninput="calc()"></div>
-            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-              <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Starter</div>
-              <div class="field"><label>% excedem</label><input type="number" id="overage_pct_s" value="40" step="5" min="0" max="100" oninput="calc()"></div>
-              <div class="field"><label>Qtd pacotes</label><input type="number" id="overage_qty_s" value="2" step="0.5" min="0" oninput="calc()"></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Pro</div>
+              <div class="field"><label>% clientes que excedem</label><input type="number" id="ovg_pct_p" value="25" min="0" max="100" oninput="calc()"></div>
+              <div class="field"><label>Pacotes extras/cliente</label><input type="number" id="ovg_qty_p" value="1" min="0" oninput="calc()"></div>
+              <div class="field"><label>Preço pacote (R$)</label><input type="number" id="ovg_price_p" value="249" oninput="calc()"></div>
             </div>
-            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-              <div style="font-size:11px;font-weight:600;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Pro</div>
-              <div class="field"><label>% excedem</label><input type="number" id="overage_pct_p" value="25" step="5" min="0" max="100" oninput="calc()"></div>
-              <div class="field"><label>Qtd pacotes</label><input type="number" id="overage_qty_p" value="1.5" step="0.5" min="0" oninput="calc()"></div>
-            </div>
-            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-              <div style="font-size:11px;font-weight:600;color:var(--purple);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Enterprise</div>
-              <div class="field"><label>% excedem</label><input type="number" id="overage_pct_e" value="10" step="5" min="0" max="100" oninput="calc()"></div>
-              <div class="field"><label>Qtd pacotes</label><input type="number" id="overage_qty_e" value="1" step="0.5" min="0" oninput="calc()"></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--purple);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">Enterprise</div>
+              <div class="field"><label>% clientes que excedem</label><input type="number" id="ovg_pct_e" value="10" min="0" max="100" oninput="calc()"></div>
+              <div class="field"><label>Pacotes extras/cliente</label><input type="number" id="ovg_qty_e" value="1" min="0" oninput="calc()"></div>
+              <div class="field"><label>Preço pacote (R$)</label><input type="number" id="ovg_price_e" value="499" oninput="calc()"></div>
             </div>
           </div>
         </div>
         <div class="card">
-            <div class="card-title">Consolidado</div>
+          <div class="card-title">Consolidado</div>
           <div class="grid-3">
             <div class="metric"><div class="metric-label">MRR Total</div><div class="metric-value accent" id="tot_mrr">—</div><div class="metric-sub">mensal recorrente</div></div>
-            <div class="metric"><div class="metric-label">Receita Overage</div><div class="metric-value gold" id="tot_overage">—</div><div class="metric-sub">pacotes adicionais</div></div>
             <div class="metric"><div class="metric-label">ARR</div><div class="metric-value" id="tot_arr">—</div><div class="metric-sub">MRR × 12</div></div>
             <div class="metric"><div class="metric-label">Lucro Bruto</div><div class="metric-value green" id="tot_profit">—</div><div class="metric-sub">receita − custos</div></div>
             <div class="metric"><div class="metric-label">Margem Consolidada</div><div class="metric-value gold" id="tot_margin">—</div><div class="metric-sub">bruta média</div></div>
             <div class="metric"><div class="metric-label">Custo LLM</div><div class="metric-value" id="tot_llm">—</div><div class="metric-sub">Claude/mês</div></div>
             <div class="metric"><div class="metric-label">Total Clientes</div><div class="metric-value" id="tot_clients">—</div><div class="metric-sub">base ativa</div></div>
-            <div class="metric"><div class="metric-label">% Overage/MRR</div><div class="metric-value" id="tot_overage_pct">—</div><div class="metric-sub">receita adicional</div></div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -510,60 +506,48 @@ function calc() {
   ];
   const tot_cl = plans.reduce((a,p)=>a+p.cl,0)||1;
   const tot_rev = plans.reduce((a,p)=>a+(p.price*p.cl),0)||1; // Receita total para distribuir custos fixos
-  
-  // Overage (pacotes adicionais) - específico por plano
-  const overage_price = +$('overage_price').value || 200;
-  
-  let tv=0,tp=0,tl=0,tov=0;
+  let tv=0,tp=0,tl=0,tovg=0;
 
   plans.forEach(pl=>{
     const llm  = pl.cl*pl.cv*cpc_tok;
     const rev  = pl.price*pl.cl;
     
-    // Overage específico por plano
-    const overage_pct = (+$(`overage_pct_${pl.px}`).value || 0) / 100;
-    const overage_qty = +$(`overage_qty_${pl.px}`).value || 0;
-    const overage_rev = pl.cl * overage_pct * overage_qty * overage_price;
-    const total_rev = rev + overage_rev;
+    // Calcula overage
+    const ovg_pct = (+$('ovg_pct_'+pl.px).value || 0) / 100;
+    const ovg_qty = +$('ovg_qty_'+pl.px).value || 0;
+    const ovg_price = +$('ovg_price_'+pl.px).value || 0;
+    const ovg_rev = pl.cl * ovg_pct * ovg_qty * ovg_price;
     
     // Custos fixos distribuídos proporcionalmente à receita (não por cliente)
     const inf  = inf_brl*(rev/tot_rev);
     const soc  = socios*(rev/tot_rev);
     
     const cost = llm+inf+soc;
+    const total_rev = rev + ovg_rev;
     const pft  = total_rev-cost;
     const mgn  = total_rev?pft/total_rev:0;
-    tv+=total_rev; tp+=pft; tl+=llm; tov+=overage_rev;
+    tv+=total_rev; tp+=pft; tl+=llm; tovg+=ovg_rev;
 
     const g=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
     g(pl.px+'_llm',    R(llm));
     g(pl.px+'_cost',   R(cost));
     g(pl.px+'_cpc',    R(cost/(pl.cl||1)));
-    g(pl.px+'_rev',    R(total_rev));
+    g(pl.px+'_rev',    R(rev));
+    g(pl.px+'_ovg',    R(ovg_rev));
     g(pl.px+'_profit', R(pft));
     const pe=$(pl.px+'_profit'); if(pe) pe.className='plan-stat-value '+(pft>=0?'positive':'negative');
     g(pl.px+'_margin', Pc(mgn));
     const me=$(pl.px+'_margin'); if(me) me.className='plan-stat-value '+(mgn>=.45?'positive':mgn>=.2?'warn':'negative');
-    
-    // Mostra overage se houver
-    if(overage_rev > 0) {
-      g(pl.px+'_overage', R(overage_rev));
-    }
   });
 
   const tm=tv?tp/tv:0;
-  const mrr_base = tv - tov;
-  const overage_pct_total = mrr_base ? (tov/mrr_base)*100 : 0;
-  
   const sg=(id,v,cl)=>{const e=$(id);if(e){e.textContent=v;if(cl)e.className='metric-value '+cl;}};
   sg('tot_mrr',    R(tv),   'accent');
-  sg('tot_overage', R(tov), 'gold');
   sg('tot_arr',    R(tv*12),'');
   sg('tot_profit', R(tp),   'green');
   sg('tot_margin', Pc(tm),  'gold');
   sg('tot_llm',    R(tl),   '');
   sg('tot_clients',N(tot_cl),'');
-  sg('tot_overage_pct', Pc(overage_pct_total/100), '');
   
   // Atualiza Unit Economics automaticamente
   calcUE();
@@ -785,7 +769,6 @@ function calcUE(){
 }
 
 calc(); renderFeatures(); renderVS(); calcComp(); calcUE();
-console.log('Calculadora carregada v2.1');
 </script>
 </body>
 </html>
