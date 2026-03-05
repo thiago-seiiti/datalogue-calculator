@@ -127,16 +127,6 @@
   .part { color:var(--orange)  !important; }
   .na   { color:var(--border2) !important; font-size:13px; }
 
-  /* COMP BARS */
-  .comp-grid { display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start; }
-  @media(max-width:700px){ .comp-grid { grid-template-columns:1fr; } }
-  .comp-bar-row { display:grid; grid-template-columns:120px 1fr 120px; gap:16px; align-items:center; margin-bottom:16px; }
-  .comp-bar-label { font-size:14px; font-weight:600; color:var(--text); text-align:left; }
-  .comp-bar-track { height:48px; background:var(--bg3); border-radius:12px; overflow:hidden; border:1px solid var(--border); position:relative; }
-  .comp-bar-fill { height:100%; border-radius:12px; transition:width .6s cubic-bezier(.25,.46,.45,.94); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; position:relative; }
-  .comp-bar-fill::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.2)); }
-  .comp-bar-amt { font-size:16px; font-weight:700; color:var(--text); text-align:right; }
-
   /* GAPS */
   .gap-item { display:flex; gap:16px; align-items:flex-start; padding:18px 20px; border-radius:12px; margin-bottom:12px; border-left:4px solid transparent; transition:all .2s; }
   .gap-item:hover { transform:translateX(4px); box-shadow:0 2px 8px rgba(0,0,0,.08); }
@@ -458,21 +448,28 @@
 
     <!-- Interactive Calculator -->
     <div class="card" style="margin-bottom:24px">
-      <div class="card-title">💰 Calculadora de Economia</div>
+      <div class="card-title">💰 Simulador: Qual o custo real para sua empresa?</div>
       <div style="display:grid;grid-template-columns:300px 1fr;gap:32px;align-items:start">
         <div>
           <div class="field">
             <label>Quantos usuários na sua empresa?</label>
             <input type="number" id="sim_users" value="10" min="1" max="200" oninput="calcComp()" style="font-size:20px;font-weight:700;text-align:center;padding:16px">
           </div>
-          <div style="background:var(--green-lt);border:1px solid var(--green);border-radius:12px;padding:16px;margin-top:16px">
+          <div style="background:var(--accent-lt);border:1px solid var(--accent);border-radius:12px;padding:16px;margin-top:16px">
+            <div style="font-size:13px;color:var(--accent);font-weight:600;margin-bottom:8px">� Sobre conversas mensais</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.6">
+              <strong>Julius Pro:</strong> Mensagens ilimitadas por usuário<br>
+              <strong>Datalogue:</strong> Limite por empresa (100-1500 conversas/mês conforme plano)
+            </div>
+          </div>
+          <div style="background:var(--green-lt);border:1px solid var(--green);border-radius:12px;padding:16px;margin-top:12px">
             <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">💡 Ponto de virada</div>
             <div style="font-size:13px;color:var(--text2);line-height:1.6">
-              Com <strong>8+ usuários</strong>, o Datalogue Pro já é mais econômico que Julius Pro. Quanto mais usuários, maior a economia!
+              Com <strong>8+ usuários</strong>, o Datalogue Pro já é mais econômico que Julius Pro, mesmo com conversas ilimitadas no Julius.
             </div>
           </div>
         </div>
-        <div id="comp-bars"></div>
+        <div id="comp-result"></div>
       </div>
     </div>
 
@@ -802,41 +799,77 @@ function renderVS(){
 
 function calcComp(){
   const u=+$('sim_users').value||10, P=5.8;
-  const plans=[
-    {l:'Datalogue Starter',c:790,    col:'var(--green)',  logo:'🟢'},
-    {l:'Datalogue Pro',    c:1990,   col:'var(--accent)', logo:'🔵'},
-    {l:'Datalogue Enterprise', c:4990, col:'var(--purple)', logo:'🟣'},
-    {l:'Julius Plus',      c:35*P*u, col:'#F59E0B',       logo:'🟡'},
-    {l:'Julius Pro',       c:45*P*u, col:'#EA580C',       logo:'🟠'},
-    {l:'Julius Max',       c:200*P*u,col:'#DC2626',       logo:'🔴'},
-  ];
-  const mx=Math.max(...plans.map(p=>p.c));
+  
+  // Custos Julius (por usuário)
+  const juliusPro = 45*P*u;
+  
+  // Custos Datalogue (fixo por empresa)
+  const datalogueStarter = 790;
+  const dataloguePro = 1990;
+  const datalogueEnt = 4990;
   
   // Calcula economia
-  const juliusPro = 45*P*u;
-  const datalogueStarter = 790;
-  const economia = juliusPro - datalogueStarter;
-  const economiaAnual = economia * 12;
+  const economiaStarter = juliusPro - datalogueStarter;
+  const economiaPro = juliusPro - dataloguePro;
+  const economiaEnt = juliusPro - datalogueEnt;
   
-  $('comp-bars').innerHTML=`
-    <div style="background:var(--green-lt);border:1px solid var(--green);border-radius:12px;padding:20px;margin-bottom:24px;text-align:center">
-      <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">💰 Economia com Datalogue Starter vs Julius Pro</div>
-      <div style="font-size:36px;font-weight:700;color:var(--green);margin-bottom:4px">${R(economia)}/mês</div>
-      <div style="font-size:16px;color:var(--text2);font-weight:600">${R(economiaAnual)}/ano</div>
-    </div>
-    ${plans.map(p=>{
-      const pct=Math.max(5,(p.c/mx)*100);
-      return `<div class="comp-bar-row">
-        <div class="comp-bar-label">${p.logo} ${p.l}</div>
-        <div class="comp-bar-track">
-          <div class="comp-bar-fill" style="width:${pct}%;background:${p.col}">
-            ${pct>25?R(p.c):''}
+  const economiaAnualPro = economiaPro * 12;
+  
+  // Determina qual plano mostrar
+  let planoRecomendado = 'Pro';
+  let economia = economiaPro;
+  let custoDatalog = dataloguePro;
+  let corPlano = 'var(--accent)';
+  
+  if (economiaStarter > 0 && economiaStarter < economiaPro) {
+    planoRecomendado = 'Starter';
+    economia = economiaStarter;
+    custoDatalog = datalogueStarter;
+    corPlano = 'var(--green)';
+  } else if (economiaEnt > economiaPro && economiaEnt > 0) {
+    planoRecomendado = 'Enterprise';
+    economia = economiaEnt;
+    custoDatalog = datalogueEnt;
+    corPlano = 'var(--purple)';
+  }
+  
+  const resultDiv = $('comp-result');
+  if (!resultDiv) return;
+  
+  if (economia > 0) {
+    resultDiv.innerHTML = `
+      <div style="background:var(--green-lt);border:2px solid var(--green);border-radius:16px;padding:32px;text-align:center">
+        <div style="font-size:14px;color:var(--green);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">💰 Economia com Datalogue ${planoRecomendado}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+          <div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Julius Pro (${u} usuários)</div>
+            <div style="font-size:32px;font-weight:700;color:var(--julius);letter-spacing:-1px">${R(juliusPro)}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">por mês</div>
+          </div>
+          <div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Datalogue ${planoRecomendado}</div>
+            <div style="font-size:32px;font-weight:700;color:${corPlano};letter-spacing:-1px">${R(custoDatalog)}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px">por mês</div>
           </div>
         </div>
-        <div class="comp-bar-amt">${R(p.c)}</div>
-      </div>`;
-    }).join('')}
-  `;
+        <div style="border-top:2px solid var(--green);padding-top:20px">
+          <div style="font-size:16px;color:var(--text);font-weight:600;margin-bottom:8px">Você economiza:</div>
+          <div style="font-size:48px;font-weight:700;color:var(--green);letter-spacing:-2px;margin-bottom:8px">${R(economia)}/mês</div>
+          <div style="font-size:20px;color:var(--text2);font-weight:600">${R(economia*12)}/ano</div>
+        </div>
+      </div>
+    `;
+  } else {
+    resultDiv.innerHTML = `
+      <div style="background:var(--orange-lt);border:2px solid var(--orange);border-radius:16px;padding:32px;text-align:center">
+        <div style="font-size:14px;color:var(--orange);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">⚠️ Julius é mais barato neste cenário</div>
+        <div style="font-size:16px;color:var(--text2);line-height:1.6">
+          Com apenas ${u} usuário${u>1?'s':''}, Julius Pro (${R(juliusPro)}/mês) ainda é mais econômico que nossos planos.<br><br>
+          <strong>Datalogue compensa a partir de 8+ usuários.</strong>
+        </div>
+      </div>
+    `;
+  }
 }
 
 function calcUE(){
