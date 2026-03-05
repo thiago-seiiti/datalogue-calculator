@@ -380,22 +380,77 @@
     </div>
 
     <!-- Pricing Comparison Hero -->
-    <div class="card" style="margin-bottom:24px;background:linear-gradient(135deg, var(--accent-lt) 0%, var(--purple-lt) 100%);border:2px solid var(--accent);">
-      <div style="text-align:center;padding:20px 0">
-        <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">💡 Principal Diferença</div>
-        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;max-width:800px;margin:0 auto">
-          <div>
-            <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px">Julius AI</div>
-            <div style="font-size:32px;font-weight:700;color:var(--julius);margin-bottom:4px">$20</div>
-            <div style="font-size:14px;color:var(--muted)">por usuário/mês</div>
-            <div style="font-size:13px;color:var(--red);margin-top:8px;font-weight:600">❌ Custo cresce linear</div>
+    <div class="card" style="margin-bottom:24px;background:linear-gradient(135deg, var(--accent-lt) 0%, var(--purple-lt) 100%);border:2px solid var(--accent);padding:40px">
+      <div style="text-align:center;margin-bottom:32px">
+        <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">💡 Principal Diferença</div>
+        <div style="font-size:24px;font-weight:700;color:var(--text);margin-bottom:8px">Modelo de Cobrança</div>
+        <div style="font-size:16px;color:var(--muted)">Julius cobra por usuário. Datalogue cobra por empresa.</div>
+      </div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;max-width:900px;margin:0 auto">
+        <!-- Julius -->
+        <div style="background:var(--bg2);border:2px solid var(--julius);border-radius:16px;padding:28px">
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Julius AI Pro</div>
+            <div style="font-size:14px;color:var(--muted)">Cobrança por usuário</div>
           </div>
-          <div style="font-size:32px;color:var(--border2)">VS</div>
-          <div>
-            <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px">Datalogue</div>
-            <div style="font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px">R$ 790+</div>
-            <div style="font-size:14px;color:var(--muted)">por empresa/mês</div>
-            <div style="font-size:13px;color:var(--green);margin-top:8px;font-weight:600">✅ Custo fixo</div>
+          <div style="text-align:center;background:var(--julius-lt);border:2px solid var(--julius);border-radius:12px;padding:20px;margin-bottom:16px">
+            <div style="font-size:42px;font-weight:700;color:var(--julius);letter-spacing:-1.5px">$45</div>
+            <div style="font-size:14px;color:var(--text2);margin-top:4px">por usuário/mês</div>
+          </div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.8">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span>1 usuário:</span>
+              <strong style="color:var(--julius)">R$ 261/mês</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span>5 usuários:</span>
+              <strong style="color:var(--julius)">R$ 1.305/mês</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span>10 usuários:</span>
+              <strong style="color:var(--julius)">R$ 2.610/mês</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0">
+              <span>20 usuários:</span>
+              <strong style="color:var(--julius)">R$ 5.220/mês</strong>
+            </div>
+          </div>
+          <div style="background:var(--red-lt);border:1px solid var(--red);border-radius:8px;padding:12px;margin-top:16px;text-align:center">
+            <div style="font-size:12px;color:var(--red);font-weight:600">❌ Custo cresce com cada pessoa</div>
+          </div>
+        </div>
+
+        <!-- Datalogue -->
+        <div style="background:var(--bg2);border:2px solid var(--accent);border-radius:16px;padding:28px;box-shadow:0 4px 12px rgba(37,99,235,0.15)">
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Datalogue Pro</div>
+            <div style="font-size:14px;color:var(--muted)">Cobrança por empresa</div>
+          </div>
+          <div style="text-align:center;background:var(--accent-lt);border:2px solid var(--accent);border-radius:12px;padding:20px;margin-bottom:16px">
+            <div style="font-size:42px;font-weight:700;color:var(--accent);letter-spacing:-1.5px">R$ 1.990</div>
+            <div style="font-size:14px;color:var(--text2);margin-top:4px">por empresa/mês</div>
+          </div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.8">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span>1 usuário:</span>
+              <strong style="color:var(--accent)">R$ 1.990/mês</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);background:var(--green-lt);margin:0 -12px;padding-left:12px;padding-right:12px">
+              <span>5 usuários:</span>
+              <strong style="color:var(--green)">R$ 1.990/mês 🔥</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);background:var(--green-lt);margin:0 -12px;padding-left:12px;padding-right:12px">
+              <span>10 usuários:</span>
+              <strong style="color:var(--green)">R$ 1.990/mês 🔥</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;background:var(--green-lt);margin:0 -12px;padding-left:12px;padding-right:12px">
+              <span>20 usuários:</span>
+              <strong style="color:var(--green)">R$ 1.990/mês 🔥</strong>
+            </div>
+          </div>
+          <div style="background:var(--green-lt);border:1px solid var(--green);border-radius:8px;padding:12px;margin-top:16px;text-align:center">
+            <div style="font-size:12px;color:var(--green);font-weight:600">✅ Custo fixo, não importa quantas pessoas</div>
           </div>
         </div>
       </div>
@@ -411,9 +466,9 @@
             <input type="number" id="sim_users" value="10" min="1" max="200" oninput="calcComp()" style="font-size:20px;font-weight:700;text-align:center;padding:16px">
           </div>
           <div style="background:var(--green-lt);border:1px solid var(--green);border-radius:12px;padding:16px;margin-top:16px">
-            <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">💡 Dica</div>
+            <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">💡 Ponto de virada</div>
             <div style="font-size:13px;color:var(--text2);line-height:1.6">
-              Com <strong>10+ usuários</strong>, o Datalogue já é mais econômico. Quanto mais usuários, maior a economia!
+              Com <strong>8+ usuários</strong>, o Datalogue Pro já é mais econômico que Julius Pro. Quanto mais usuários, maior a economia!
             </div>
           </div>
         </div>
@@ -726,9 +781,9 @@ const gaps=[
 ];
 
 const adv=[
-  {type:'advantage',title:'Preço por empresa, não por usuário',desc:'Com 5+ usuários, Datalogue é muito mais barato. Veja no simulador.'},
-  {type:'advantage',title:'Claude Sonnet — janela de 200k tokens',desc:'Contexto maior que GPT-4o. Melhor para bases grandes.'},
-  {type:'advantage',title:'Setup + engenharia de dados inclusa',desc:'Julius é self-service puro. Datalogue faz a mão na massa.'},
+  {type:'advantage',title:'Escalabilidade de custo: usuários ilimitados',desc:'Julius cobra $45/usuário. Com 10+ usuários, Datalogue é muito mais barato.'},
+  {type:'advantage',title:'Claude Sonnet — janela de 200k tokens',desc:'Contexto maior que GPT-4o. Melhor para bases grandes e análises complexas.'},
+  {type:'advantage',title:'Setup + engenharia de dados inclusa',desc:'Julius é self-service puro. Datalogue faz a mão na massa com seu time.'},
   {type:'advantage',title:'Produto 100% em PT-BR + LGPD',desc:'Julius é inglês. Mercado BR sub-atendido por ferramentas nativas.'},
   {type:'advantage',title:'Dashboard padrão incluso',desc:'Julius não tem dashboard. Datalogue entrega visualização desde o dia 1.'},
   {type:'advantage',title:'SLA e suporte com CSM dedicado',desc:'Julius só tem comunidade/email. Datalogue tem SLA no Enterprise.'},
