@@ -4,53 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Datalogue — Calculadora Interna</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #F7F6F3;
+    --bg:        #FAFAFA;
     --bg2:       #FFFFFF;
-    --bg3:       #F0EEE9;
-    --border:    #E2DDD6;
-    --border2:   #C8C2B8;
-    --text:      #1A1714;
-    --text2:     #3D3830;
-    --muted:     #8C8077;
-    --accent:    #1A4FD4;
-    --accent-lt: #EBF0FC;
-    --green:     #1A7A4A;
-    --green-lt:  #E8F5EE;
-    --orange:    #C4610A;
-    --orange-lt: #FEF3E6;
-    --red:       #C0392B;
-    --red-lt:    #FDECEB;
-    --purple:    #6B3FA0;
-    --purple-lt: #F2ECF9;
-    --julius:    #B5770A;
-    --julius-lt: #FBF5E6;
+    --bg3:       #F5F5F5;
+    --border:    #E5E5E5;
+    --border2:   #D4D4D4;
+    --text:      #171717;
+    --text2:     #404040;
+    --muted:     #737373;
+    --accent:    #2563EB;
+    --accent-lt: #EFF6FF;
+    --green:     #16A34A;
+    --green-lt:  #F0FDF4;
+    --orange:    #EA580C;
+    --orange-lt: #FFF7ED;
+    --red:       #DC2626;
+    --red-lt:    #FEF2F2;
+    --purple:    #7C3AED;
+    --purple-lt: #F5F3FF;
+    --julius:    #F59E0B;
+    --julius-lt: #FFFBEB;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'Geist Mono',monospace; font-size:13px; line-height:1.6; min-height:100vh; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size:15px; line-height:1.6; min-height:100vh; font-weight:400; }
   body::before {
     content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.018'%3E%3Cpath d='M0 0h1v40H0V0zm39 0h1v40h-1V0zM0 0v1h40V0H0zm0 39v1h40v-1H0z'/%3E%3C/g%3E%3C/svg%3E");
+    background:var(--bg);
   }
   .wrap { position:relative; z-index:1; max-width:1300px; margin:0 auto; padding:0 28px 100px; }
 
   /* HEADER */
-  header { padding:36px 0 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
+  header { padding:40px 0 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:40px; }
   .header-left { display:flex; align-items:baseline; gap:16px; }
-  .logo { font-family:'Instrument Serif',serif; font-size:28px; letter-spacing:-0.5px; color:var(--text); }
-  .logo-sub { font-size:11px; color:var(--muted); letter-spacing:0.5px; }
+  .logo { font-family:'Inter', sans-serif; font-size:32px; font-weight:700; letter-spacing:-1px; color:var(--text); }
+  .logo-sub { font-size:13px; color:var(--muted); letter-spacing:0; font-weight:500; }
   .header-right { display:flex; align-items:center; gap:10px; }
-  .badge { background:var(--bg3); border:1px solid var(--border2); color:var(--muted); font-size:10px; padding:4px 12px; border-radius:4px; letter-spacing:1.5px; text-transform:uppercase; font-weight:500; }
-  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 2s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .badge { background:var(--bg3); border:1px solid var(--border); color:var(--muted); font-size:11px; padding:6px 14px; border-radius:6px; letter-spacing:0; text-transform:none; font-weight:500; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
   /* TABS */
-  .tabs { display:flex; gap:0; margin-bottom:28px; border-bottom:2px solid var(--border); }
-  .tab { padding:10px 22px; cursor:pointer; font-family:'Geist Mono',monospace; font-size:12px; font-weight:500; color:var(--muted); transition:all .15s; border:none; background:transparent; border-bottom:2px solid transparent; margin-bottom:-2px; white-space:nowrap; }
-  .tab:hover { color:var(--text); }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:32px; border-bottom:1px solid var(--border); padding-bottom:0; }
+  .tab { padding:12px 20px; cursor:pointer; font-family:'Inter', sans-serif; font-size:14px; font-weight:500; color:var(--muted); transition:all .2s; border:none; background:transparent; border-bottom:2px solid transparent; margin-bottom:-1px; white-space:nowrap; border-radius:6px 6px 0 0; }
+  .tab:hover { color:var(--text); background:var(--bg3); }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; background:transparent; }
 
   /* PANELS */
   .panel { display:none; }
@@ -58,8 +58,8 @@
   @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
   /* CARD */
-  .card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
-  .card-title { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  .card-title { font-size:11px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; color:var(--muted); margin-bottom:24px; display:flex; align-items:center; gap:12px; }
   .card-title::after { content:''; flex:1; height:1px; background:var(--border); }
 
   /* GRIDS */
@@ -69,63 +69,63 @@
   @media(max-width:900px){ .grid-3,.grid-2,.grid-auto { grid-template-columns:1fr; } }
 
   /* INPUTS */
-  .field { margin-bottom:14px; }
-  .field label { display:block; font-size:10px; font-weight:600; letter-spacing:.8px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
-  .field input[type="number"] { width:100%; background:var(--bg); border:1px solid var(--border2); color:var(--text); padding:9px 12px; border-radius:6px; font-family:'Geist Mono',monospace; font-size:14px; font-weight:500; transition:all .15s; outline:none; -moz-appearance:textfield; }
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:13px; font-weight:600; letter-spacing:0; text-transform:none; color:var(--text2); margin-bottom:8px; }
+  .field input[type="number"] { width:100%; background:var(--bg2); border:1px solid var(--border); color:var(--text); padding:10px 14px; border-radius:8px; font-family:'Inter', sans-serif; font-size:15px; font-weight:400; transition:all .2s; outline:none; -moz-appearance:textfield; }
   .field input[type="number"]::-webkit-outer-spin-button,.field input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;}
-  .field input[type="number"]:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(26,79,212,.08); }
+  .field input[type="number"]:focus { border-color:var(--accent); background:var(--bg2); box-shadow:0 0 0 3px var(--accent-lt); }
 
   /* METRICS */
-  .metric { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:10px; }
-  .metric-label { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
-  .metric-value { font-family:'Instrument Serif',serif; font-size:28px; letter-spacing:-.5px; color:var(--text); }
+  .metric { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:12px; }
+  .metric-label { font-size:13px; font-weight:600; letter-spacing:0; text-transform:none; color:var(--muted); margin-bottom:8px; }
+  .metric-value { font-family:'Inter', sans-serif; font-size:36px; font-weight:700; letter-spacing:-1px; color:var(--text); }
   .metric-value.green  { color:var(--green); }
   .metric-value.accent { color:var(--accent); }
   .metric-value.gold   { color:var(--julius); }
-  .metric-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+  .metric-sub { font-size:13px; color:var(--muted); margin-top:4px; font-weight:400; }
 
   /* PLAN CARDS */
-  .plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+  .plan-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:24px; }
   @media(max-width:900px){ .plan-grid { grid-template-columns:1fr; } }
-  .plan-card { border-radius:12px; padding:22px; border:1px solid var(--border); background:var(--bg2); box-shadow:0 1px 3px rgba(0,0,0,.06); transition:box-shadow .2s,transform .2s; position:relative; overflow:hidden; }
-  .plan-card:hover { box-shadow:0 4px 16px rgba(0,0,0,.08); transform:translateY(-1px); }
-  .plan-accent-bar { position:absolute; top:0; left:0; right:0; height:3px; border-radius:12px 12px 0 0; }
+  .plan-card { border-radius:16px; padding:28px; border:1px solid var(--border); background:var(--bg2); box-shadow:0 1px 3px rgba(0,0,0,.04); transition:all .3s; position:relative; overflow:hidden; }
+  .plan-card:hover { box-shadow:0 8px 24px rgba(0,0,0,.08); transform:translateY(-2px); border-color:var(--border2); }
+  .plan-accent-bar { position:absolute; top:0; left:0; right:0; height:4px; border-radius:16px 16px 0 0; }
   .plan-card.starter .plan-accent-bar { background:var(--green); }
   .plan-card.pro .plan-accent-bar     { background:var(--accent); }
   .plan-card.ent .plan-accent-bar     { background:var(--purple); }
-  .plan-eyebrow { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; margin-top:8px; }
+  .plan-eyebrow { font-size:13px; font-weight:700; letter-spacing:0; text-transform:uppercase; margin-bottom:8px; margin-top:12px; }
   .plan-card.starter .plan-eyebrow { color:var(--green); }
   .plan-card.pro .plan-eyebrow     { color:var(--accent); }
   .plan-card.ent .plan-eyebrow     { color:var(--purple); }
-  .plan-price { font-family:'Instrument Serif',serif; font-size:32px; letter-spacing:-1px; color:var(--text); margin:8px 0 2px; }
-  .plan-price span { font-size:13px; color:var(--muted); font-family:'Geist Mono',monospace; letter-spacing:0; }
-  .plan-target { font-size:11px; color:var(--muted); margin-bottom:18px; }
-  .plan-divider { height:1px; background:var(--border); margin:14px 0; }
-  .plan-stat { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:11px; }
-  .plan-stat-label { color:var(--muted); }
-  .plan-stat-value { font-weight:600; color:var(--text2); }
+  .plan-price { font-family:'Inter', sans-serif; font-size:42px; font-weight:700; letter-spacing:-2px; color:var(--text); margin:12px 0 4px; }
+  .plan-price span { font-size:16px; color:var(--muted); font-family:'Inter', sans-serif; letter-spacing:0; font-weight:400; }
+  .plan-target { font-size:14px; color:var(--muted); margin-bottom:20px; font-weight:400; }
+  .plan-divider { height:1px; background:var(--border); margin:16px 0; }
+  .plan-stat { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; }
+  .plan-stat-label { color:var(--muted); font-weight:400; }
+  .plan-stat-value { font-weight:600; color:var(--text); }
   .plan-stat-value.positive { color:var(--green); }
   .plan-stat-value.negative { color:var(--red); }
   .plan-stat-value.warn     { color:var(--orange); }
   .plan-stat-value.blue     { color:var(--accent); }
 
   /* FEATURES TABLE */
-  .table-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--border); }
+  .table-wrap { overflow-x:auto; border-radius:16px; border:1px solid var(--border); }
   .feat-table { width:100%; border-collapse:collapse; background:var(--bg2); }
-  .feat-table th { text-align:center; padding:14px 16px; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; background:var(--bg3); border-bottom:2px solid var(--border2); white-space:nowrap; }
+  .feat-table th { text-align:center; padding:16px 20px; font-size:13px; font-weight:600; letter-spacing:0; text-transform:none; background:var(--bg3); border-bottom:1px solid var(--border); white-space:nowrap; }
   .feat-table th:first-child { text-align:left; width:36%; }
   .col-starter { color:var(--green) !important; }
   .col-pro     { color:var(--accent) !important; }
   .col-ent     { color:var(--purple) !important; }
   .col-julius  { color:var(--julius) !important; }
-  .feat-table td { padding:10px 16px; text-align:center; border-bottom:1px solid var(--border); font-size:12px; color:var(--muted); background:var(--bg2); }
-  .feat-table td:first-child { text-align:left; color:var(--text2); }
+  .feat-table td { padding:14px 20px; text-align:center; border-bottom:1px solid var(--border); font-size:14px; color:var(--muted); background:var(--bg2); }
+  .feat-table td:first-child { text-align:left; color:var(--text); font-weight:500; }
   .feat-table tr:hover td { background:var(--bg3); }
-  .feat-section td { background:var(--bg3) !important; color:var(--accent) !important; font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:8px 16px; border-bottom:1px solid var(--border2) !important; }
+  .feat-section td { background:var(--bg3) !important; color:var(--accent) !important; font-size:12px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; padding:12px 20px; border-bottom:1px solid var(--border) !important; }
   .yes  { color:var(--green)   !important; font-weight:600; }
   .no   { color:var(--red)     !important; }
   .part { color:var(--orange)  !important; }
-  .na   { color:var(--border2) !important; font-size:11px; }
+  .na   { color:var(--border2) !important; font-size:13px; }
 
   /* COMP BARS */
   .comp-grid { display:grid; grid-template-columns:220px 1fr; gap:24px; align-items:start; }
@@ -137,38 +137,38 @@
   .comp-bar-amt { font-size:12px; font-weight:600; color:var(--text2); text-align:right; }
 
   /* GAPS */
-  .gap-item { display:flex; gap:14px; align-items:flex-start; padding:14px 16px; border-radius:8px; margin-bottom:8px; border-left:3px solid transparent; }
+  .gap-item { display:flex; gap:16px; align-items:flex-start; padding:16px 20px; border-radius:12px; margin-bottom:10px; border-left:4px solid transparent; }
   .gap-item.critical  { background:var(--red-lt);    border-left-color:var(--red); }
   .gap-item.medium    { background:var(--orange-lt); border-left-color:var(--orange); }
   .gap-item.advantage { background:var(--green-lt);  border-left-color:var(--green); }
-  .gap-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .gap-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:6px; }
   .gap-item.critical  .gap-dot { background:var(--red); }
   .gap-item.medium    .gap-dot { background:var(--orange); }
   .gap-item.advantage .gap-dot { background:var(--green); }
-  .gap-title { font-weight:600; font-size:12px; color:var(--text); margin-bottom:2px; }
-  .gap-desc  { font-size:11px; color:var(--muted); line-height:1.5; }
+  .gap-title { font-weight:600; font-size:14px; color:var(--text); margin-bottom:4px; }
+  .gap-desc  { font-size:14px; color:var(--muted); line-height:1.5; font-weight:400; }
 
   /* UNIT ECONOMICS */
-  .ue-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .ue-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
   @media(max-width:900px){ .ue-grid { grid-template-columns:1fr; } }
-  .ue-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
-  .ue-plan { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
-  .ue-row { display:flex; justify-content:space-between; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--bg3); }
+  .ue-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  .ue-plan { font-size:12px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+  .ue-row { display:flex; justify-content:space-between; align-items:baseline; padding:8px 0; border-bottom:1px solid var(--bg3); }
   .ue-row:last-child { border-bottom:none; }
-  .ue-key { font-size:11px; color:var(--muted); }
-  .ue-val { font-family:'Instrument Serif',serif; font-size:17px; letter-spacing:-.3px; color:var(--text); }
+  .ue-key { font-size:14px; color:var(--muted); font-weight:400; }
+  .ue-val { font-family:'Inter', sans-serif; font-size:20px; font-weight:700; letter-spacing:-.5px; color:var(--text); }
   .ue-val.yes  { color:var(--green); }
   .ue-val.part { color:var(--orange); }
   .ue-val.no   { color:var(--red); }
 
   /* SECTION */
-  .section-heading { margin-bottom:24px; }
-  .section-title { font-family:'Instrument Serif',serif; font-size:22px; letter-spacing:-.3px; color:var(--text); margin-bottom:4px; }
-  .section-sub { font-size:12px; color:var(--muted); }
+  .section-heading { margin-bottom:32px; }
+  .section-title { font-family:'Inter', sans-serif; font-size:32px; font-weight:700; letter-spacing:-1px; color:var(--text); margin-bottom:8px; }
+  .section-sub { font-size:16px; color:var(--muted); font-weight:400; line-height:1.5; }
 
   /* INFO NOTE */
-  .info-note { background:var(--accent-lt); border:1px solid rgba(26,79,212,.15); border-radius:8px; padding:12px 16px; font-size:11px; color:var(--muted); margin-top:16px; line-height:1.7; }
-  .info-note strong { color:var(--accent); }
+  .info-note { background:var(--accent-lt); border:1px solid var(--accent); border-radius:12px; padding:16px 20px; font-size:14px; color:var(--text2); margin-top:20px; line-height:1.6; }
+  .info-note strong { color:var(--accent); font-weight:600; }
 
   ::-webkit-scrollbar { width:5px; height:5px; }
   ::-webkit-scrollbar-track { background:var(--bg3); }
@@ -207,8 +207,8 @@
         <div class="card" style="margin-bottom:14px">
           <div class="card-title">Parâmetros Gerais</div>
           <div class="field"><label>PTAX (USD→BRL)</label><input type="number" id="ptax" value="5.80" step="0.05" oninput="calc()"></div>
-          <div class="field"><label>Tokens input / conversa</label><input type="number" id="tok_in" value="20000" step="1000" oninput="calc()"></div>
-          <div class="field"><label>Tokens output / conversa</label><input type="number" id="tok_out" value="2000" step="500" oninput="calc()"></div>
+          <div class="field"><label>Tokens input / conversa</label><input type="number" id="tok_in" value="8000" step="1000" oninput="calc()"></div>
+          <div class="field"><label>Tokens output / conversa</label><input type="number" id="tok_out" value="3000" step="500" oninput="calc()"></div>
           <div class="field"><label>Sonnet input ($/1M tok)</label><input type="number" id="llm_in" value="3.00" step="0.5" oninput="calc()"></div>
           <div class="field"><label>Sonnet output ($/1M tok)</label><input type="number" id="llm_out" value="15.00" step="0.5" oninput="calc()"></div>
         </div>
@@ -219,7 +219,7 @@
         </div>
         <div class="card">
           <div class="card-title">Sócios (BRL/mês)</div>
-          <div class="field"><label>Custo oportunidade total</label><input type="number" id="socios" value="9000" step="500" oninput="calc()"></div>
+          <div class="field"><label>Custo oportunidade total</label><input type="number" id="socios" value="4000" step="500" oninput="calc()"></div>
         </div>
       </div>
       <div>
@@ -230,8 +230,8 @@
             <div class="plan-price">R$ 790 <span>/mês</span></div>
             <div class="plan-target">Pequenas empresas</div>
             <div class="field"><label>Preço (R$)</label><input type="number" id="price_s" value="790" oninput="calc()"></div>
-            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_s" value="10" oninput="calc()"></div>
-            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_s" value="100" oninput="calc()"></div>
+            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_s" value="5" oninput="calc()"></div>
+            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_s" value="80" oninput="calc()"></div>
             <div class="plan-divider"></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo LLM</span><span class="plan-stat-value" id="s_llm">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="s_cost">—</span></div>
@@ -246,8 +246,8 @@
             <div class="plan-price">R$ 1.990 <span>/mês</span></div>
             <div class="plan-target">Médias empresas</div>
             <div class="field"><label>Preço (R$)</label><input type="number" id="price_p" value="1990" oninput="calc()"></div>
-            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_p" value="50" oninput="calc()"></div>
-            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_p" value="1000" oninput="calc()"></div>
+            <div class="field"><label>Clientes ativos</label><input type="number" id="clients_p" value="5" oninput="calc()"></div>
+            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_p" value="500" oninput="calc()"></div>
             <div class="plan-divider"></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo LLM</span><span class="plan-stat-value" id="p_llm">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="p_cost">—</span></div>
@@ -263,7 +263,7 @@
             <div class="plan-target">Grandes empresas</div>
             <div class="field"><label>Preço (R$)</label><input type="number" id="price_e" value="4990" oninput="calc()"></div>
             <div class="field"><label>Clientes ativos</label><input type="number" id="clients_e" value="5" oninput="calc()"></div>
-            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_e" value="2000" oninput="calc()"></div>
+            <div class="field"><label>Conversas/cliente/mês</label><input type="number" id="convs_e" value="1500" oninput="calc()"></div>
             <div class="plan-divider"></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo LLM</span><span class="plan-stat-value" id="e_llm">—</span></div>
             <div class="plan-stat"><span class="plan-stat-label">Custo total</span><span class="plan-stat-value" id="e_cost">—</span></div>
@@ -298,23 +298,23 @@
     <!-- Plan header cards -->
     <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:4px;padding:0 0 0 0">
       <div></div>
-      <div style="background:var(--green-lt);border:1.5px solid var(--green);border-radius:10px;padding:14px 16px;text-align:center">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">Starter</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);letter-spacing:-0.5px">R$ 790</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px">por empresa / mês</div>
-        <div style="font-size:10px;color:var(--green);margin-top:6px;font-weight:600">+ Setup R$ 2.000</div>
+      <div style="background:var(--green-lt);border:2px solid var(--green);border-radius:16px;padding:20px 24px;text-align:center">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px">Starter</div>
+        <div style="font-family:'Inter', sans-serif;font-size:32px;font-weight:700;color:var(--text);letter-spacing:-1px">R$ 790</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:4px;font-weight:400">por empresa / mês</div>
+        <div style="font-size:13px;color:var(--green);margin-top:12px;font-weight:600">+ Setup R$ 2.000</div>
       </div>
-      <div style="background:var(--accent-lt);border:1.5px solid var(--accent);border-radius:10px;padding:14px 16px;text-align:center">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px">Pro</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);letter-spacing:-0.5px">R$ 1.990</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px">por empresa / mês</div>
-        <div style="font-size:10px;color:var(--accent);margin-top:6px;font-weight:600">+ Setup R$ 4.000</div>
+      <div style="background:var(--accent-lt);border:2px solid var(--accent);border-radius:16px;padding:20px 24px;text-align:center">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Pro</div>
+        <div style="font-family:'Inter', sans-serif;font-size:32px;font-weight:700;color:var(--text);letter-spacing:-1px">R$ 1.990</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:4px;font-weight:400">por empresa / mês</div>
+        <div style="font-size:13px;color:var(--accent);margin-top:12px;font-weight:600">+ Setup R$ 4.000</div>
       </div>
-      <div style="background:var(--purple-lt);border:1.5px solid var(--purple);border-radius:10px;padding:14px 16px;text-align:center">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:4px">Enterprise</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);letter-spacing:-0.5px">R$ 4.990</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px">por empresa / mês</div>
-        <div style="font-size:10px;color:var(--purple);margin-top:6px;font-weight:600">+ Setup sob consulta</div>
+      <div style="background:var(--purple-lt);border:2px solid var(--purple);border-radius:16px;padding:20px 24px;text-align:center">
+        <div style="font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--purple);margin-bottom:8px">Enterprise</div>
+        <div style="font-family:'Inter', sans-serif;font-size:32px;font-weight:700;color:var(--text);letter-spacing:-1px">R$ 4.990</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:4px;font-weight:400">por empresa / mês</div>
+        <div style="font-size:13px;color:var(--purple);margin-top:12px;font-weight:600">+ Setup sob consulta</div>
       </div>
     </div>
 
@@ -380,28 +380,24 @@
       <div class="section-title">Unit Economics por Cliente</div>
       <div class="section-sub">LTV, CAC, Payback e contribuição marginal. Ajuste os inputs abaixo.</div>
     </div>
+    
+    <div class="info-note" style="margin-bottom:28px">
+      <strong>O que é Unit Economics?</strong><br>
+      São as métricas que mostram se cada cliente é lucrativo para o negócio. As principais são:<br><br>
+      • <strong>LTV (Lifetime Value)</strong>: Quanto de receita um cliente gera durante todo o relacionamento com a empresa<br>
+      • <strong>CAC (Custo de Aquisição de Cliente)</strong>: Quanto custa para conquistar um novo cliente (marketing + vendas)<br>
+      • <strong>LTV/CAC Ratio</strong>: Quanto você ganha para cada R$ 1 investido. Ideal: acima de 3x<br>
+      • <strong>Payback</strong>: Tempo para recuperar o investimento em CAC. Ideal: menos de 12 meses<br>
+      • <strong>Margem de Contribuição</strong>: Lucro após custos diretos (LLM, suporte, infraestrutura)
+    </div>
+    
     <div class="ue-grid" style="margin-bottom:20px" id="ue-cards"></div>
     <div class="card">
-      <div class="card-title">Inputs</div>
-      <div class="grid-3">
-        <div>
-          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px">Starter</div>
-          <div class="field"><label>CAC (R$)</label><input type="number" id="ue_cac_s" value="800" oninput="calcUE()"></div>
-          <div class="field"><label>Churn mensal (%)</label><input type="number" id="ue_churn_s" value="2" step="0.5" oninput="calcUE()"></div>
-          <div class="field"><label>Custo suporte/cliente</label><input type="number" id="ue_sup_s" value="80" oninput="calcUE()"></div>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px">Pro</div>
-          <div class="field"><label>CAC (R$)</label><input type="number" id="ue_cac_p" value="2500" oninput="calcUE()"></div>
-          <div class="field"><label>Churn mensal (%)</label><input type="number" id="ue_churn_p" value="1.5" step="0.5" oninput="calcUE()"></div>
-          <div class="field"><label>Custo suporte/cliente</label><input type="number" id="ue_sup_p" value="150" oninput="calcUE()"></div>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:14px">Enterprise</div>
-          <div class="field"><label>CAC (R$)</label><input type="number" id="ue_cac_e" value="8000" oninput="calcUE()"></div>
-          <div class="field"><label>Churn mensal (%)</label><input type="number" id="ue_churn_e" value="1" step="0.5" oninput="calcUE()"></div>
-          <div class="field"><label>Custo suporte/cliente</label><input type="number" id="ue_sup_e" value="400" oninput="calcUE()"></div>
-        </div>
+      <div class="card-title">Premissas Fixas</div>
+      <div style="font-size:14px;color:var(--text2);line-height:1.8">
+        <p style="margin-bottom:12px"><strong>CAC (Custo de Aquisição):</strong> Estimado em 1x o MRR para Starter, 1.25x para Pro e 1.6x para Enterprise</p>
+        <p style="margin-bottom:12px"><strong>Churn mensal:</strong> 5% (Starter), 3% (Pro), 1.5% (Enterprise) - baseado em benchmarks reais de mercado B2B SaaS 2025</p>
+        <p><strong>Custo de suporte:</strong> Calculado automaticamente com base nos custos operacionais por cliente da primeira aba</p>
       </div>
     </div>
   </div>
@@ -439,14 +435,18 @@ function calc() {
     {px:'e', price:+$('price_e').value, cl:+$('clients_e').value, cv:+$('convs_e').value},
   ];
   const tot_cl = plans.reduce((a,p)=>a+p.cl,0)||1;
+  const tot_rev = plans.reduce((a,p)=>a+(p.price*p.cl),0)||1; // Receita total para distribuir custos fixos
   let tv=0,tp=0,tl=0;
 
   plans.forEach(pl=>{
     const llm  = pl.cl*pl.cv*cpc_tok;
-    const inf  = inf_brl*(pl.cl/tot_cl);
-    const soc  = socios*(pl.cl/tot_cl);
-    const cost = llm+inf+soc;
     const rev  = pl.price*pl.cl;
+    
+    // Custos fixos distribuídos proporcionalmente à receita (não por cliente)
+    const inf  = inf_brl*(rev/tot_rev);
+    const soc  = socios*(rev/tot_rev);
+    
+    const cost = llm+inf+soc;
     const pft  = rev-cost;
     const mgn  = rev?pft/rev:0;
     tv+=rev; tp+=pft; tl+=llm;
@@ -470,6 +470,9 @@ function calc() {
   sg('tot_margin', Pc(tm),  'gold');
   sg('tot_llm',    R(tl),   '');
   sg('tot_clients',N(tot_cl),'');
+  
+  // Atualiza Unit Economics automaticamente
+  calcUE();
 }
 
 const featData = [
@@ -597,32 +600,74 @@ function calcComp(){
 }
 
 function calcUE(){
-  const defs=[
-    {px:'s',name:'Starter',   price:790,  color:'var(--green)'},
-    {px:'p',name:'Pro',       price:1990, color:'var(--accent)'},
-    {px:'e',name:'Enterprise',price:4990, color:'var(--purple)'},
+  // Pega os dados calculados da primeira aba
+  const ptax    = +$('ptax').value    || 5.8;
+  const tok_in  = +$('tok_in').value  || 20000;
+  const tok_out = +$('tok_out').value || 2000;
+  const li      = +$('llm_in').value  || 3;
+  const lo      = +$('llm_out').value || 15;
+  const inf_brl = (+$('supabase').value+$('monitor').value)*ptax;
+  const socios  = +$('socios').value  || 9000;
+  const cpc_tok = ((tok_in/1e6)*li + (tok_out/1e6)*lo)*ptax;
+
+  const plans = [
+    {px:'s', price:+$('price_s').value, cl:+$('clients_s').value, cv:+$('convs_s').value},
+    {px:'p', price:+$('price_p').value, cl:+$('clients_p').value, cv:+$('convs_p').value},
+    {px:'e', price:+$('price_e').value, cl:+$('clients_e').value, cv:+$('convs_e').value},
   ];
-  $('ue-cards').innerHTML=defs.map(d=>{
-    const cac  =+$(`ue_cac_${d.px}`).value  ||1;
-    const churn=(+$(`ue_churn_${d.px}`).value||2)/100;
-    const sup  =+$(`ue_sup_${d.px}`).value  ||100;
-    const life =churn>0?1/churn:999;
-    const ltv  =d.price*life;
-    const lc   =ltv/cac;
-    const pay  =cac/d.price;
-    const cont =d.price-sup;
-    const lcC  =lc>=3?'yes':lc>=1?'part':'no';
-    const paC  =pay<=12?'yes':pay<=24?'part':'no';
+  const tot_cl = plans.reduce((a,p)=>a+p.cl,0)||1;
+  const tot_rev = plans.reduce((a,p)=>a+(p.price*p.cl),0)||1; // Receita total
+
+  const defs=[
+    {px:'s',name:'Starter',   churn:5.0,  cacMultiplier:1.0,  color:'var(--green)'},
+    {px:'p',name:'Pro',       churn:3.0,  cacMultiplier:1.25, color:'var(--accent)'},
+    {px:'e',name:'Enterprise',churn:1.5,  cacMultiplier:1.6,  color:'var(--purple)'},
+  ];
+  
+  $('ue-cards').innerHTML=defs.map((d,i)=>{
+    const pl = plans[i];
+    const price = pl.price;
+    const rev = pl.price * pl.cl;
+    
+    // Calcula custo por cliente (da primeira aba)
+    const llm  = pl.cl*pl.cv*cpc_tok;
+    
+    // Custos fixos distribuídos proporcionalmente à receita
+    const inf  = inf_brl*(rev/tot_rev);
+    const soc  = socios*(rev/tot_rev);
+    
+    const cost = llm+inf+soc;
+    const costPerClient = cost/(pl.cl||1);
+    
+    // CAC baseado no preço (regra de mercado SaaS)
+    const cac = price * d.cacMultiplier;
+    
+    // Churn e lifetime
+    const churn = d.churn/100;
+    const life = churn>0 ? 1/churn : 999;
+    
+    // Métricas
+    const ltv  = price * life;
+    const lc   = ltv / cac;
+    const pay  = cac / price;
+    const cont = price - costPerClient;
+    
+    // Classes de cor
+    const lcC  = lc>=3?'yes':lc>=1?'part':'no';
+    const paC  = pay<=12?'yes':pay<=24?'part':'no';
+    const contC = cont>0?'yes':'no';
+    
     return `<div class="ue-card">
       <div class="ue-plan" style="color:${d.color}">${d.name}</div>
-      <div class="ue-row"><span class="ue-key">MRR / cliente</span><span class="ue-val">${R(d.price)}</span></div>
-      <div class="ue-row"><span class="ue-key">CAC</span><span class="ue-val">${R(cac)}</span></div>
-      <div class="ue-row"><span class="ue-key">Churn mensal</span><span class="ue-val">${(churn*100).toFixed(1)}%</span></div>
-      <div class="ue-row"><span class="ue-key">Lifetime</span><span class="ue-val">${life.toFixed(0)} meses</span></div>
+      <div class="ue-row"><span class="ue-key">MRR / cliente</span><span class="ue-val">${R(price)}</span></div>
+      <div class="ue-row"><span class="ue-key">CAC estimado</span><span class="ue-val">${R(cac)}</span></div>
+      <div class="ue-row"><span class="ue-key">Custo / cliente</span><span class="ue-val">${R(costPerClient)}</span></div>
+      <div class="ue-row"><span class="ue-key">Churn mensal</span><span class="ue-val">${d.churn.toFixed(1)}%</span></div>
+      <div class="ue-row"><span class="ue-key">Lifetime médio</span><span class="ue-val">${life.toFixed(0)} meses</span></div>
       <div class="ue-row"><span class="ue-key">LTV</span><span class="ue-val">${R(ltv)}</span></div>
       <div class="ue-row"><span class="ue-key">LTV / CAC</span><span class="ue-val ${lcC}">${X(lc)}</span></div>
       <div class="ue-row"><span class="ue-key">Payback</span><span class="ue-val ${paC}">${pay.toFixed(1)} meses</span></div>
-      <div class="ue-row"><span class="ue-key">Contrib. marginal</span><span class="ue-val">${R(cont)}</span></div>
+      <div class="ue-row"><span class="ue-key">Contrib. marginal</span><span class="ue-val ${contC}">${R(cont)}</span></div>
     </div>`;
   }).join('');
 }
